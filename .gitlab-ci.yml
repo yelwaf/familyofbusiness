@@ -1,0 +1,11 @@
+stages:
+  - deploy
+
+deploy_to_s3:
+  stage: deploy
+  image: amazon/aws-cli:latest
+  script:
+    - aws s3 sync ./public s3://$AWS_S3_BUCKET --delete
+    - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
