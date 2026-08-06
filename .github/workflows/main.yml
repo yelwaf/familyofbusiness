@@ -20,7 +20,7 @@ jobs:
       - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
-          node-modules-cache: 'npm'
+          cache: 'npm'
 
       - name: Install and Build Dependencies
         run: |
