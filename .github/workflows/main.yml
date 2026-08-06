@@ -16,6 +16,7 @@ jobs:
     permissions:
       id-token: write   # Required for OIDC
       contents: read    # Required for checkout
+      
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
