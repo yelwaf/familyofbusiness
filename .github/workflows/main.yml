@@ -17,11 +17,6 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Set Up Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-
       - name: Install and Build Dependencies
         run: |
           npm ci
