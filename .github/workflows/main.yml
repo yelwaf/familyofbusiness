@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Allows you to also trigger it manually
 
 permissions:
   id-token: write
@@ -12,25 +13,22 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # Required for OIDC
+      contents: read    # Required for checkout
+      
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
-
-      - name: Set Up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-modules-cache: 'npm'
-
-      - name: Install and Build Dependencies
-        run: |
-          npm ci
-          npm run build
 
       - name: Authenticate with AWS via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           aws-region: us-west-2
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          audience: sts.amazonaws.com
 
       - name: Sync Production Files to S3 Bucket
         run: |
