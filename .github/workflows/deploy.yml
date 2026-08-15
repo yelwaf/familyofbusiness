@@ -29,13 +29,13 @@ jobs:
       - name: Authenticate with AWS via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          aws-region: us-west-2
 
       - name: Sync Production Files to S3 Bucket
         run: |
-          aws s3 sync ./dist s3://${{ secrets.AWS_S3_BUCKET }} --delete
+          aws s3 sync ./dist s3://${{ env.AWS_S3_BUCKET }} --delete
 
       - name: Invalidate Old CloudFront Cache
         run: |
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+          aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
